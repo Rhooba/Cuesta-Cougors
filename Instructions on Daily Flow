@@ -1,0 +1,86 @@
+
+Golden rule: pull before you push. Always grab the latest version before uploading your work it saves everyone from merge nightmares.
+
+
+THE DAILY FLOW
+
+pull
+write code
+add
+commit
+push
+
+
+GETTING THE REPO (ONCE, ON DAY ONE)
+
+1. git clone https://github.com/Rhooba/Cuesta-Cougors.git
+Downloads the whole project to your computer. Only do this once.
+
+2. cd repo
+Step into the folder that was just created.
+
+
+
+PULLING GRAB EVERYONE'S LATEST CHANGES
+
+1. git pull origin main
+Downloads and merges the latest from the main branch. Run this every time you sit down to work.
+
+
+
+
+PUSHING/SEND YOUR WORK TO GITHUB
+
+1. git add .
+Stages everything you changed. The dot means "all files." You can also do git add Driver.java for one file.
+
+2. git commit -m "add Driver.addRating() method" (example)
+Saves a snapshot with a message. Be specific â€” future you will thank present you.
+
+3. git push origin main
+Uploads your commit to GitHub so everyone can see it.
+
+
+
+BRANCHES WORK WITHOUT WRECKING MAIN
+
+Create and switch to a new branch
+1. git checkout -b feature/driver
+Makes a new branch and jumps to it. Name it after what you're building.
+
+2. git push origin feature/driver
+Push your branch up so others can see it too.
+
+
+Switch between branches
+1. git branch
+Lists all branches. The one with a star is where you are right now.
+
+2. git checkout main
+Jumps back to main. Swap "main" for any branch name.
+
+
+
+MERGING YOUR BRANCH INTO MAIN (WHEN YOU'RE DONE)
+
+1. git checkout main
+Switch back to main first.
+
+2. git pull origin main
+Grab any updates your teammates pushed while you were working.
+
+3. git merge feature/driver
+Brings your branch's changes into main.
+
+4. git push origin main
+Push the merged result up to GitHub.
+
+
+
+USEFUL ANYTIME
+
+? git status 
+Shows what you've changed and what's staged. Run this whenever you're confused.
+
+? git log --oneline
+Shows recent commits in a clean list. Good for seeing what everyone has done.
