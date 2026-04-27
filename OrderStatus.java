@@ -12,7 +12,7 @@
  * - ASSIGNED occurs when a Driver is set on the Order
  *
  * @author
- * @version 1.0
+ * @version 1.1
  */
 public enum OrderStatus {
     PLACED,
