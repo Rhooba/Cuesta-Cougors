@@ -2,8 +2,12 @@
  * Represents a single item on the food delivery menu.
  * Menu items are loaded from menu.txt at startup and stored in GlobalData.
  *
+ * Responsibilities:
+ * - Store item name and price
+ * - Provide formatted output for display and file storage
+ *
  * @author
- * @version 1.0
+ * @version 1.1
  */
 public class MenuItem {
 
@@ -17,27 +21,28 @@ public class MenuItem {
      * @param price    the price of the item in dollars
      */
     public MenuItem(String itemName, double price) {
-        // TODO: implement
+        this.itemName = itemName;
+        this.price = price;
     }
 
     /** @return the name of this menu item */
     public String getItemName() {
-        return null; // TODO: implement
+        return itemName;
     }
 
     /** @return the price of this menu item */
     public double getPrice() {
-        return 0.0; // TODO: implement
+        return price;
     }
 
     /** @param price the updated price */
     public void setPrice(double price) {
-        // TODO: implement
+        this.price = price;
     }
 
     /** @param itemName the updated item name */
     public void setItemName(String itemName) {
-        // TODO: implement
+        this.itemName = itemName;
     }
 
     /**
@@ -46,6 +51,6 @@ public class MenuItem {
      */
     @Override
     public String toString() {
-        return null; // TODO: implement
+        return itemName + " - $" + String.format("%.2f", price);
     }
 }
