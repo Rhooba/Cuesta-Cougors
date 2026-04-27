@@ -2,10 +2,16 @@ import java.util.List;
 
 /**
  * Represents a customer's order in the food delivery system.
- * Each new order is appended to orders.txt via FileManager.
+ * Each Order stores its items, total cost, status, assigned driver, and delivery address.
+ * Orders are expected to be persisted externally via FileManager.
+ *
+ * Responsibilities:
+ * - Maintain order state (status + driver assignment)
+ * - Calculate total cost from MenuItems
+ * - Provide formatted output for display/logging
  *
  * @author
- * @version 1.0
+ * @version 1.1
  */
 public class Order {
 
@@ -17,93 +23,116 @@ public class Order {
     private Driver assignedDriver;
     private String deliveryAddress;
 
-    /** Auto-increments to give each order a unique ID */
+    /** Static counter used to generate unique order IDs at runtime */
     private static int nextId = 1;
 
     /**
-     * Constructs a new Order for a customer with a list of items.
-     * Automatically assigns a unique orderId.
-     * Initial status is PLACED.
+     * Constructs a new Order.
+     * - Assigns a unique orderId using nextId
+     * - Sets initial status to PLACED
+     * - Driver is null until assigned
+     * - Total is computed immediately from provided items
      *
      * @param customer        the Customer placing the order
-     * @param items           the list of MenuItems in this order
-     * @param deliveryAddress the delivery address for this order
+     * @param items           list of MenuItems included in the order
+     * @param deliveryAddress destination for the order
      */
     public Order(Customer customer, List<MenuItem> items, String deliveryAddress) {
         this.orderId = nextId++;
         this.status  = OrderStatus.PLACED;
-        // TODO: implement remaining initialization
-        // this.total = calculateTotal();
+
+        this.customer = customer;
+        this.items = items;
+        this.deliveryAddress = deliveryAddress;
+        this.assignedDriver = null;
+
+        this.total = calculateTotal();
     }
 
     /**
-     * Calculates and returns the total cost of all items in this order.
+     * Computes the total price by summing all MenuItem prices.
+     * Does NOT modify state beyond returning the computed value.
      *
-     * Time Complexity:  O(n) where n is the number of items
+     * Time Complexity:  O(n)
      * Space Complexity: O(1)
      *
-     * @return total cost as a double
+     * @return sum of item prices
      */
     public double calculateTotal() {
-        return 0.0; // TODO: implement
+        double sum = 0.0;
+        for (MenuItem item : items) {
+            sum += item.getPrice();
+        }
+        return sum;
     }
 
-    /** @return the unique order ID */
+    /** @return unique identifier for this order */
     public int getOrderId() {
-        return 0; // TODO: implement
+        return orderId;
     }
 
-    /** @return the Customer who placed this order */
+    /** @return Customer who placed the order */
     public Customer getCustomer() {
-        return null; // TODO: implement
+        return customer;
     }
 
-    /** @return the list of MenuItems in this order */
+    /** @return list of items in this order (direct reference) */
     public List<MenuItem> getItems() {
-        return null; // TODO: implement
+        return items;
     }
 
-    /** @return the current OrderStatus */
+    /** @return current lifecycle state of the order */
     public OrderStatus getStatus() {
-        return null; // TODO: implement
+        return status;
     }
 
     /**
-     * Updates the status of this order.
-     * Called by Driver when marking in-progress or delivered.
+     * Updates the order status (e.g., ASSIGNED, PICKED_UP, DELIVERED).
+     * No validation is enforced here—state control is expected externally.
      *
-     * @param status the new OrderStatus
+     * @param status new status value
      */
     public void setStatus(OrderStatus status) {
-        // TODO: implement
+        this.status = status;
     }
 
-    /** @return the calculated order total */
+    /** @return cached total calculated at construction */
     public double getTotal() {
-        return 0.0; // TODO: implement
+        return total;
     }
 
-    /** @return the assigned Driver, or null if not yet assigned */
+    /** @return assigned driver, or null if unassigned */
     public Driver getAssignedDriver() {
-        return null; // TODO: implement
-    }
-
-    /** @param driver the Driver to assign */
-    public void setAssignedDriver(Driver driver) {
-        // TODO: implement
-    }
-
-    /** @return the delivery address for this order */
-    public String getDeliveryAddress() {
-        return null; // TODO: implement
+        return assignedDriver;
     }
 
     /**
-     * Returns a formatted String of this order for display and file logging.
-     * Example: "Order #1 | Customer: john | Status: PLACED | Total: $12.97"
+     * Assigns a driver to the order.
+     * Automatically transitions status to ASSIGNED if driver is non-null.
+     *
+     * @param driver Driver responsible for delivery
+     */
+    public void setAssignedDriver(Driver driver) {
+        this.assignedDriver = driver;
+        if (driver != null) {
+            this.status = OrderStatus.ASSIGNED;
+        }
+    }
+
+    /** @return delivery destination string */
+    public String getDeliveryAddress() {
+        return deliveryAddress;
+    }
+
+    /**
+     * Returns a concise, formatted summary of the order.
+     * Format: Order #ID | Customer | Status | Total
      */
     @Override
     public String toString() {
-        return null; // TODO: implement
+        return "Order #" + orderId +
+               " | Customer: " + customer.getUsername() +
+               " | Status: " + status +
+               " | Total: $" + String.format("%.2f", total);
     }
 }
