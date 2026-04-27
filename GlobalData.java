@@ -45,51 +45,41 @@ public class GlobalData {
 
     /**
      * Adds a new order to the back of the order queue.
-     *
-     * @param order the Order to enqueue
      */
     public void enqueueOrder(Order order) {
-        // TODO: implement
+        orderQueue.offer(order);
+        
     }
 
     /**
      * Removes and returns the next order from the front of the queue.
-     *
-     * @return the next Order, or null if the queue is empty
      */
     public Order dequeueOrder() {
-        return null; // TODO: implement
+        return orderQueue.poll();
     }
 
     /**
      * Returns without removing the next order in the queue.
-     *
-     * @return the next Order, or null if queue is empty
      */
     public Order peekNextOrder() {
-        return null; // TODO: implement
+        return orderQueue.peek();
     }
 
     // --- Driver Pool ---
 
     /**
      * Adds an available driver to the driver pool.
-     *
-     * @param driver the Driver to add
      */
     public void addDriverToPool(Driver driver) {
-        // TODO: implement
+        driverPool.offer(driver);
     }
 
     /**
      * Removes and returns the highest-rated available driver from the pool.
-     *
-     * @return the top Driver, or null if the pool is empty
      */
     public Driver getBestDriver() {
-        return null; // TODO: implement
+        return driverPool.poll();
     }
-
     // --- Order Processing ---
 
     /**
@@ -99,86 +89,97 @@ public class GlobalData {
      * Print a message if no drivers are currently available.
      */
     public void processNextOrder() {
-        // TODO: implement
+        if (orderQueue.isEmpty()) {
+            System.out.println("No drivers available at the moment. Please wait...");
+            return;
+        }
+        Order order = dequeueOrder();
+        Driver driver = getBestDriver();
+        driver.setAssignedOrder(order);
+        driver.setAvailable(false);
+        order.setAssignedDriver(driver);
+        order.setStatus(OrderStatus.ACCEPTED);
+        System.out.println("Order # " + order.getOrderId() + " assigned to driver " + driver.getName());
     }
 
     // --- Login ---
 
     /**
      * Searches all user lists for a matching username and validates the password.
-     *
-     * @param username      the entered username
-     * @param inputPassword the entered password
+     * @param username     
+     * @param inputPassword 
      * @return the matching User, or null if not found or password is wrong
      */
     public User login(String username, String inputPassword) {
-        return null; // TODO: implement — search customers, drivers, admins
+        for (Customer customer : customers) {
+            if (customer.getUsername().equals(username) && customer.login(inputPassword)) {
+                return customer;
+            }
+
+        for (Driver driver : drivers) {
+            if(driver.getUsername().equals(username) && driver.login(inputPassword)) {
+                return driver;
+            }
+        for (Admin admin : admins) {
+            if(admin.getUsername().equals(username) && admin.login(inputPassword)) {
+                return admin;
+            }
+        }
+           return null; // no match found
+        }
     }
+}
 
     // --- Menu ---
 
     /** @param item the MenuItem to add */
     public void addMenuItem(MenuItem item) {
-        // TODO: implement
+        menu.put(item.getItemName(), item);
     }
 
     /** @param itemName the name of the item to remove */
     public void removeMenuItem(String itemName) {
-        // TODO: implement
+        menu.remove(itemName);
     }
 
     /**
-     * @param itemName the name of the item to look up
+     * @param itemName 
      * @return the matching MenuItem, or null if not found
      */
     public MenuItem getMenuItem(String itemName) {
-        return null; // TODO: implement
+        return menu.get(itemName);
     }
 
     /** @return the full menu HashMap */
     public HashMap<String, MenuItem> getMenu() {
-        return null; // TODO: implement
+        return menu;
     }
-
     // --- User Lists ---
-
-    /** @param customer Customer to add to master list */
     public void addCustomer(Customer customer) {
-        // TODO: implement
+        customers.add(customer);
     }
-
-    /** @param driver Driver to add to master list */
     public void addDriver(Driver driver) {
-        // TODO: implement
+        drivers.add(driver);
     }
-
-    /** @param admin Admin to add to master list */
     public void addAdmin(Admin admin) {
-        // TODO: implement
+        admins.add(admin);
     }
-
-    /** @return list of all Customers */
     public List<Customer> getCustomers() {
-        return null; // TODO: implement
+        return customers;
     }
-
-    /** @return list of all Drivers */
     public List<Driver> getDrivers() {
-        return null; // TODO: implement
+        return drivers;
     }
-
-    /** @return list of all Admins */
     public List<Admin> getAdmins() {
-        return null; // TODO: implement
+        return admins;
     }
 
     /** @return the current order queue */
     public Queue<Order> getOrderQueue() {
-        return null; // TODO: implement
+        return orderQueue;
     }
 
-    /** @return the current driver pool */
     public PriorityQueue<Driver> getDriverPool() {
-        return null; // TODO: implement
+      return driverPool;
     }
 }
