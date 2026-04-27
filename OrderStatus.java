@@ -1,14 +1,23 @@
 /**
- * Represents the possible statuses of an Order in the system.
+ * Represents the lifecycle states of an Order in the system.
  *
- * Status flow: PLACED --> ACCEPTED --> IN_PROGRESS --> DELIVERED
+ * Typical flow:
+ * PLACED → ASSIGNED → PICKED_UP → DELIVERED
+ *
+ * Additional state:
+ * - CANCELLED: order was terminated before completion
+ *
+ * Notes:
+ * - State transitions are not enforced here; handled externally (Order / Driver logic)
+ * - ASSIGNED occurs when a Driver is set on the Order
  *
  * @author
  * @version 1.0
  */
 public enum OrderStatus {
     PLACED,
-    ACCEPTED,
-    IN_PROGRESS,
-    DELIVERED
+    ASSIGNED,
+    PICKED_UP,
+    DELIVERED,
+    CANCELLED
 }
