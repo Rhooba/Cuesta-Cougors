@@ -19,7 +19,9 @@ public abstract class User {
      * @param name     the user's full name
      */
     public User(String username, String password, String name) {
-        // TODO: implement
+        this.username = username;
+        this.password = password;
+        this.name = name;
     }
 
     /**
@@ -35,31 +37,36 @@ public abstract class User {
      * @return true if the password matches, false otherwise
      */
     public boolean login(String inputPassword) {
-        return false; // TODO: implement
+        if(inputPassword.equals(this.password)) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     /** @return username as a String */
     public String getUsername() {
-        return null; // TODO: implement
+        return this.username;
     }
 
     /** @return the user's full name */
     public String getName() {
-        return null; // TODO: implement
+        return this.name;
     }
 
     /** @return password as a String */
     public String getPassword() {
-        return null; // TODO: implement
+        return this.password;
     }
 
     /** @param password the new password */
     public void setPassword(String password) {
-        // TODO: implement
+        this.password = password;
     }
 
     @Override
     public String toString() {
-        return null; // TODO: implement
+        return this.username + ", " + this.name;
     }
 }

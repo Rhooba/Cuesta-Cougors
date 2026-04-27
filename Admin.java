@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 /**
  * Represents an Admin user in the food delivery system.
  * Admins can manage the menu and view all orders.
@@ -24,8 +26,32 @@ public class Admin extends User {
      * Options: add item, remove item, update item price, view all orders.
      */
     @Override
-    public void getDashboard() {
-        // TODO: implement
+    public void getDashboard(Scanner scnr) {
+
+        System.out.println("Options: \n ----------");
+        System.out.println("Add item: add ");
+        System.out.println("Remove item: remove ");
+        System.out.println("Update item price: update ");
+        System.out.println("View all orders: view ");
+        String input = scnr.nextLine().toLowerCase();
+
+        switch(input) {
+            case "add":
+                String itemName = scnr.nextLine();
+                int price =
+                addMenuItem();
+                break;
+            case "remove":
+                removeMenuItem(scnr.nextLine());
+                break;
+            case "update":
+
+                break;
+            case "view":
+                break;
+            default:
+                System.out.println("Please return a valid operation");
+        }
     }
 
     /**
