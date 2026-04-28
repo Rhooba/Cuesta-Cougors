@@ -37,17 +37,26 @@ public class Admin extends User {
 
         switch(input) {
             case "add":
+                System.out.println("Enter the name of the item: ");
                 String itemName = scnr.nextLine();
-                int price =
-                addMenuItem();
+                System.out.println("Enter a price for the item: ");
+                int price = scnr.nextInt();
+                MenuItem newItem = new MenuItem(itemName, price);
+                addMenuItem(newItem);
                 break;
             case "remove":
+                System.out.println("Enter an item to remove: ");
                 removeMenuItem(scnr.nextLine());
                 break;
             case "update":
-
+                System.out.println("Enter an item to update: ");
+                String itemUpdate = scnr.nextLine();
+                System.out.println("Enter a new price for the item: ");
+                int newPrice = scnr.nextInt();
+                updateMenuItem(itemUpdate, newPrice);
                 break;
             case "view":
+                viewAllOrders();
                 break;
             default:
                 System.out.println("Please return a valid operation");
