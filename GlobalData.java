@@ -71,7 +71,9 @@ public class GlobalData {
      * Adds an available driver to the driver pool.
      */
     public void addDriverToPool(Driver driver) {
-        driverPool.offer(driver);
+        if (driver != null && driver.isAvailable()) {
+            driverPool.offer(driver);
+        }
     }
 
     /**
@@ -80,6 +82,28 @@ public class GlobalData {
     public Driver getBestDriver() {
         return driverPool.poll();
     }
+
+    //A collection of helper methods for development and sanity purposes on the driver pool
+    //Checks if the driver pool is empty (no available drivers)
+    public boolean isPoolEmpty() {
+        return driverPool.isEmpty();
+    }
+
+    //Returns the number of available drivers in the pool
+    public int getPoolSize() {
+        return driverPool.size();
+    }
+
+    //Removes a specific driver from the pool
+    public boolean removeDriverFromPool(Driver driver) {
+        return driverPool.remove(driver);
+    }
+
+    //Peeks at the highest-rated available driver without removing them from the pool
+    public Driver peekBestDriver() {
+        return driverPool.peek();
+    }
+
     // --- Order Processing ---
 
     /**
@@ -90,11 +114,17 @@ public class GlobalData {
      */
     public void processNextOrder() {
         if (orderQueue.isEmpty()) {
+            System.out.println("No orders in the queue.");
+            return;
+        }
+        
+        Driver driver = getBestDriver();
+        if (driver == null) {
             System.out.println("No drivers available at the moment. Please wait...");
             return;
         }
+        
         Order order = dequeueOrder();
-        Driver driver = getBestDriver();
         driver.setAssignedOrder(order);
         driver.setAvailable(false);
         order.setAssignedDriver(driver);
@@ -158,8 +188,14 @@ public class GlobalData {
     public void addCustomer(Customer customer) {
         customers.add(customer);
     }
+    //Ask Brandon to explain this whole globalData reference thing please
     public void addDriver(Driver driver) {
         drivers.add(driver);
+        driver.setGlobalData(this);
+        // Add driver to pool since they start as available
+        if (driver.isAvailable()) {
+            addDriverToPool(driver);
+        }
     }
     public void addAdmin(Admin admin) {
         admins.add(admin);

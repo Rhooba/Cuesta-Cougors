@@ -17,6 +17,7 @@ public class Driver extends User implements Comparable<Driver> {
     private double averageRating;
     private Order assignedOrder;
     private String currentLocation;
+    private GlobalData globalData; //We may or may not want this, but for now it's useful
 
     private static final int MAX_RATINGS = 10;
 
@@ -75,8 +76,18 @@ public class Driver extends User implements Comparable<Driver> {
      *
      * @param rating the new rating value (1–5)
      */
+
+    
     public void addRating(int rating) {
-        // TODO: implement
+        if (rating < 1 || rating > 5) {
+            throw new IllegalArgumentException("Rating must be between 1 and 5.");
+        }
+
+        if (ratings.size() >= MAX_RATINGS) {
+            ratings.removeFirst();
+        }
+        ratings.add(rating);
+        calculateAverageRating();
     }
 
     /**
@@ -86,59 +97,86 @@ public class Driver extends User implements Comparable<Driver> {
      * @return the computed average, or 0.0 if no ratings exist
      */
     public double calculateAverageRating() {
-        return 0.0; // TODO: implement
+        if (ratings.isEmpty()) {
+            averageRating = 0.0;
+            return 0.0;
+        }
+        int sum = 0;
+        for (int rating : ratings) {
+            sum += rating;
+        }
+        averageRating = (double) sum / ratings.size();
+        return averageRating;
     }
 
     /**
      * Compares this driver to another by average rating.
      * Used by the PriorityQueue to determine ordering.
+     * Drivers with higher ratings (closer to 5) are prioritized first.
      *
      * @param other the other Driver to compare
      * @return a negative, zero, or positive integer based on rating comparison
      */
     @Override
     public int compareTo(Driver other) {
-        return 0; // TODO: implement — think about which direction gives you the driver you want first
+        return Double.compare(other.averageRating, this.averageRating);
     }
 
     /** @return true if driver is available for assignment */
     public boolean isAvailable() {
-        return false; // TODO: implement
+        return isAvailable;
     }
 
     /** @param available the availability status to set */
+    //Now a very important method, meant to only have available drivers in the pool, we'll see how this goes
     public void setAvailable(boolean available) {
-        // TODO: implement
+        this.isAvailable = available;
+        
+        // Update driver pool if GlobalData is set
+        if (globalData != null) {
+            if (available) {
+                // Add driver back to pool when they become available
+                globalData.addDriverToPool(this);
+            } else {
+                // Remove driver from pool when they become unavailable
+                globalData.removeDriverFromPool(this);
+            }
+        }
     }
 
     /** @return the driver's current average rating */
     public double getAverageRating() {
-        return 0.0; // TODO: implement
+        return averageRating;
     }
 
     /** @return the currently assigned Order, or null if none */
     public Order getAssignedOrder() {
-        return null; // TODO: implement
+        return assignedOrder;
     }
 
     /** @param order the Order to assign to this driver */
     public void setAssignedOrder(Order order) {
-        // TODO: implement
+        this.assignedOrder = order;
     }
 
     /** @return the driver's current location */
     public String getCurrentLocation() {
-        return null; // TODO: implement
+        return currentLocation;
     }
 
     /** @param location the new current location */
     public void setCurrentLocation(String location) {
-        // TODO: implement
+        this.currentLocation = location;
     }
 
     /** @return the full ratings linked list */
     public LinkedList<Integer> getRatings() {
-        return null; // TODO: implement
+        return ratings;
+    }
+
+    //Drivers need a globalData reference, so this might be nice
+    public void setGlobalData(GlobalData globalData) {
+        this.globalData = globalData;
     }
 
     @Override
