@@ -145,11 +145,14 @@ public class GlobalData {
             if (customer.getUsername().equals(username) && customer.login(inputPassword)) {
                 return customer;
             }
+        }
 
         for (Driver driver : drivers) {
             if(driver.getUsername().equals(username) && driver.login(inputPassword)) {
                 return driver;
             }
+        }
+
         for (Admin admin : admins) {
             if(admin.getUsername().equals(username) && admin.login(inputPassword)) {
                 return admin;
@@ -157,8 +160,8 @@ public class GlobalData {
         }
            return null; // no match found
         }
-    }
-}
+    
+
 
     // --- Menu ---
 

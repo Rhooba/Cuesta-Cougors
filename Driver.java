@@ -1,4 +1,5 @@
 import java.util.LinkedList;
+import java.util.Scanner;
 
 /**
  * Represents a Driver user in the food delivery system.
@@ -42,9 +43,11 @@ public class Driver extends User implements Comparable<Driver> {
     /**
      * Displays the Driver dashboard.
      * Options: view assigned order, mark in-progress, mark delivered.
+     *
+     * @param scnr the shared Scanner for reading user input
      */
     @Override
-    public void getDashboard() {
+    public void getDashboard(Scanner scnr) {
         // TODO: implement
     }
 

@@ -1,3 +1,8 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Scanner;
 /**
  * Handles all file input and output for the food delivery system.
  * Reads and writes users, menu items, and orders to/from text files.
@@ -14,6 +19,7 @@
  * @author
  * @version 1.0
  */
+
 public class FileManager {
 
     public static final String MENU_FILE      = "menu.txt";
@@ -29,7 +35,20 @@ public class FileManager {
      * @param globalData the GlobalData instance to populate
      */
     public void loadMenu(GlobalData globalData) {
-        // TODO: implement
+        // implement loadMenu
+        try (Scanner scanner = new Scanner(new File(MENU_FILE))) {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                String[] parts = line.split(",");
+                if (parts.length == 2) {
+                    String name = parts[0].trim();
+                    double price = Double.parseDouble(parts[1].trim());
+                    globalData.addMenuItem(new MenuItem(name, price));
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("Menu file not found: " + MENU_FILE);
+        }
     }
 
     /**
@@ -38,8 +57,24 @@ public class FileManager {
      * @param globalData the GlobalData instance to populate
      */
     public void loadCustomers(GlobalData globalData) {
-        // TODO: implement
+        // implement loadCustomers
+        try (Scanner scanner = new Scanner(new File(CUSTOMERS_FILE))) {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                String[] parts = line.split(",");
+                if (parts.length == 4) {
+                    String username = parts[0].trim();
+                    String password = parts[1].trim();
+                    String name = parts[2].trim();
+                    String address = parts[3].trim();
+                    globalData.addCustomer(new Customer(username, password, name, address));
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("Customers file not found: " + CUSTOMERS_FILE);
+        }
     }
+    
 
     /**
      * Reads all drivers from drivers.txt and adds them to GlobalData.
@@ -87,7 +122,13 @@ public class FileManager {
      * @param globalData the GlobalData with the current customer list
      */
     public void saveCustomers(GlobalData globalData) {
-        // TODO: implement
+        try (FileWriter writer = new FileWriter(CUSTOMERS_FILE)) {
+            for (Customer customer : globalData.getCustomers()) {
+                writer.write(customer.getUsername() + "," + customer.getPassword() + "," + customer.getName() + "," + customer.getDeliveryAddress() + "\n");
+            }
+        } catch (IOException e) {
+            System.out.println("Error saving information");
+        }
     }
 
     /**
@@ -116,7 +157,11 @@ public class FileManager {
      * @param globalData the GlobalData instance to populate
      */
     public void loadAll(GlobalData globalData) {
-        // TODO: call loadMenu, loadCustomers, loadDrivers, loadAdmins in order
+        // save all info
+        loadMenu(globalData);
+        loadCustomers(globalData);
+        loadDrivers(globalData);
+        loadAdmins(globalData);
     }
 
     /**
@@ -126,6 +171,10 @@ public class FileManager {
      * @param globalData the GlobalData instance to persist
      */
     public void saveAll(GlobalData globalData) {
-        // TODO: call saveMenu, saveCustomers, saveDrivers, saveAdmins in order
+        // save all info
+        saveMenu(globalData);
+        saveCustomers(globalData);
+        saveDrivers(globalData);
+        saveAdmins(globalData);
     }
 }

@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 /**
  * Abstract base class representing a user in the food delivery system.
  * All user types extend this class.
@@ -27,8 +29,10 @@ public abstract class User {
     /**
      * Displays the role-specific dashboard menu for this user.
      * Each subclass implements this differently.
+     *
+     * @param scnr the shared Scanner for reading user input
      */
-    public abstract void getDashboard();
+    public abstract void getDashboard(Scanner scnr);
 
     /**
      * Validates the provided password against the stored password.

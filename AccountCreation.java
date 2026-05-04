@@ -18,7 +18,8 @@ public class AccountCreation {
      * @param fileManager the file I/O handler
      */
     public AccountCreation(GlobalData globalData, FileManager fileManager) {
-        // TODO: implement
+        this.globalData = globalData;
+        this.fileManager = fileManager;
     }
 
     /**
@@ -32,9 +33,14 @@ public class AccountCreation {
      * @param deliveryAddress the customer's delivery address
      * @return the newly created Customer, or null if the username already exists
      */
-    public Customer createCustomer(String username, String password,
-                                   String name, String deliveryAddress) {
-        return null; // TODO: implement
+    public Customer createCustomer(String username, String password, String name, String deliveryAddress) {
+        if (usernameExists(username)) {
+            return null;
+        }
+        Customer customer = new Customer(username, password, name, deliveryAddress);
+        globalData.addCustomer(customer);
+        fileManager.saveCustomers(globalData);
+        return customer;
     }
 
     /**
@@ -48,9 +54,15 @@ public class AccountCreation {
      * @param currentLocation the driver's starting location
      * @return the newly created Driver, or null if the username already exists
      */
-    public Driver createDriver(String username, String password,
-                               String name, String currentLocation) {
-        return null; // TODO: implement
+    public Driver createDriver(String username, String password, String name, String currentLocation) {
+        if (usernameExists(username)) {
+            return null;
+        }
+        Driver driver = new Driver(username, password, name, currentLocation);
+        globalData.addDriver(driver);
+        globalData.addDriverToPool(driver);
+        fileManager.saveDrivers(globalData);
+        return driver;
     }
 
     /**
@@ -64,7 +76,13 @@ public class AccountCreation {
      * @return the newly created Admin, or null if the username already exists
      */
     public Admin createAdmin(String username, String password, String name) {
-        return null; // TODO: implement
+        if (usernameExists(username)) {
+            return null;
+        }
+        Admin admin = new Admin(username, password, name);
+        globalData.addAdmin(admin);
+        fileManager.saveAdmins(globalData);
+        return admin;
     }
 
     /**
@@ -74,7 +92,22 @@ public class AccountCreation {
      * @return true if already in use, false if available
      */
     public boolean usernameExists(String username) {
-        return false; // TODO: implement
+        for (Customer customer : globalData.getCustomers()) {
+            if (customer.getUsername().equals(username)) {
+                return true;
+            }
+        }
+        for (Driver driver : globalData.getDrivers()) {
+            if (driver.getUsername().equals(username)) {
+                return true;
+            }
+        }
+        for (Admin admin : globalData.getAdmins()) {
+            if (admin.getUsername().equals(username)) {
+                return true;
+            }
+        }
+        return false; // username is available
     }
 
     /**
@@ -85,6 +118,9 @@ public class AccountCreation {
      * @return true if valid, false otherwise
      */
     public boolean isValidPassword(String password) {
-        return false; // TODO: implement
+        if (password == null || password.length() < 6) {
+            return false;
+        }
+        return true;
     }
 }

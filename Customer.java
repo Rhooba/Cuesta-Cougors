@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * Represents a Customer user in the food delivery system.
@@ -24,16 +25,38 @@ public class Customer extends User {
     public Customer(String username, String password, String name, String deliveryAddress) {
         super(username, password, name);
         this.orderHistory = new ArrayList<>();
-        // TODO: implement remaining initialization
+        this.deliveryAddress = deliveryAddress;
     }
 
     /**
      * Displays the Customer dashboard.
      * Options: place order, view order history, rate a driver.
+     *
+     * @param scnr the shared Scanner for reading user input
      */
     @Override
-    public void getDashboard() {
-        // TODO: implement
+    public void getDashboard(Scanner scnr) {
+        System.out.println("\n--- Customer Dashboard ---");
+        System.out.println("1. Place Order");
+        System.out.println("2. View Order History");
+        System.out.println("3. Logout");
+        System.out.print("Choose an option: ");
+        String choice = scnr.nextLine().trim();
+
+        switch (choice) {
+            case "1":
+                // TODO: build item selection flow
+                System.out.println("Place order coming soon!");
+                break;
+            case "2":
+                viewOrderHistory();
+                break;
+            case "3":
+                System.out.println("Logging out...");
+                break;
+            default:
+                System.out.println("Invalid option.");
+        }
     }
 
     /**
@@ -45,14 +68,20 @@ public class Customer extends User {
      * @return the newly created Order object
      */
     public Order placeOrder(List<MenuItem> items) {
-        return null; // TODO: implement
+        // place new order by customer
+        System.out.println("Select menu items to order:");
+        return null; 
     }
 
     /**
      * Displays all past orders made by this customer.
      */
     public void viewOrderHistory() {
-        // TODO: implement
+        // view order history
+        System.out.println("Your Order History: ");
+        for (Order order : orderHistory) {
+            System.out.println(order);
+        }
     }
 
     /**
@@ -61,7 +90,8 @@ public class Customer extends User {
      * @param order the Order to record
      */
     public void addOrderToHistory(Order order) {
-        // TODO: implement
+        //  add to order history
+        orderHistory.add(order);
     }
 
     /**
@@ -72,26 +102,32 @@ public class Customer extends User {
      * @param rating the rating score (1–5)
      */
     public void rateDriver(Driver driver, int rating) {
-        // TODO: validate rating range, then call driver.addRating()
+        // rate your driver
+        if (rating >= 1 && rating <= 5) {
+            driver.addRating(rating);
+        }
     }
 
     /** @return the customer's delivery address */
     public String getDeliveryAddress() {
-        return null; // TODO: implement
+        // customer delivery address
+        return deliveryAddress;
     }
 
     /** @param deliveryAddress the new delivery address */
     public void setDeliveryAddress(String deliveryAddress) {
-        // TODO: implement
+        // set the delivery address
+        this.deliveryAddress = deliveryAddress;
     }
 
     /** @return the customer's order history */
     public List<Order> getOrderHistory() {
-        return null; // TODO: implement
+        // get order history
+        return orderHistory;
     }
 
     @Override
     public String toString() {
-        return null; // TODO: implement
+        return "Customer: " + getName() + " | Address: " + deliveryAddress;
     }
 }
