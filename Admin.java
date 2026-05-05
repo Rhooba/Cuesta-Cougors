@@ -8,6 +8,13 @@ import java.util.Scanner;
  * @version 1.0
  */
 public class Admin extends User {
+private GlobalData globalData;
+
+
+    public void setGlobalData(GlobalData globalData) {
+        this.globalData = globalData;
+    }
+
 
     /**
      * Constructs an Admin with the given credentials.
@@ -69,7 +76,12 @@ public class Admin extends User {
      * @param item the MenuItem to add
      */
     public void addMenuItem(MenuItem item) {
-        // TODO: implement
+        if(globalData.menu.containsKey(item.getItemName())) {
+            System.out.println("Item is already on the menu");
+        }
+        else {
+            globalData.menu.put(item.getItemName(), item);
+        }
     }
 
     /**
@@ -78,7 +90,8 @@ public class Admin extends User {
      * @param itemName the name of the item to remove
      */
     public void removeMenuItem(String itemName) {
-        // TODO: implement
+        if(globalData.menu.containsKey(itemName)) globalData.menu.remove(itemName);
+        else System.out.println("Item already does not exist");
     }
 
     /**
@@ -88,7 +101,12 @@ public class Admin extends User {
      * @param newPrice the new price to assign
      */
     public void updateMenuItem(String itemName, double newPrice) {
-        // TODO: implement
+        if(globalData.menu.containsKey(itemName)) {
+            globalData.menu.get(itemName).setPrice(newPrice);
+        }
+        else {
+            System.out.println("Item is not on the menu");
+        }
     }
 
     /**
@@ -96,6 +114,11 @@ public class Admin extends User {
      */
     public void viewAllOrders() {
         // TODO: implement
+        System.out.println("List of orders: ");
+
+        for(int i = 0; i < globalData.getOrderQueue().size(); i++) {
+
+        }
     }
 
     @Override
