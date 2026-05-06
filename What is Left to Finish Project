@@ -1,0 +1,24 @@
+Driver.java
+getDashboard() — entire dashboard (view order, mark in-progress, mark delivered)
+markInProgress() — update assigned order status to IN_PROGRESS
+markDelivered() — mark delivered, free driver, re-add to pool
+Driver() constructor — remaining initialization (set globalData reference)
+toString() — returns null
+
+Customer.java
+placeOrder() — menu selection UI, create Order, enqueue in GlobalData, save to file
+getDashboard() — needs a loop so it doesn't exit after one action, and needs "Rate a Driver" option wired up
+
+
+GlobalData.java
+Admin login search is likely missing (needs to check the rest of the login() method)
+
+
+General / Integration
+No menu.txt exists yet — menu is always empty at startup
+No admins.txt — no way to log in as admin
+Order processing flow not wired to customer — placeOrder() needs to call globalData.processNextOrder()
+Driver rating from customer after delivery not surfaced in the UI
+
+
+
