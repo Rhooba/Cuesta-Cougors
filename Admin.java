@@ -35,15 +35,16 @@ private GlobalData globalData;
     @Override
     public void getDashboard(Scanner scnr) {
 
-        System.out.println("Options: \n ----------");
-        System.out.println("Add item: add ");
-        System.out.println("Remove item: remove ");
-        System.out.println("Update item price: update ");
-        System.out.println("View all orders: view ");
-        String input = scnr.nextLine().toLowerCase();
+        System.out.println("\n--- Admin Dashboard ---");
+        System.out.println("1. Add item");
+        System.out.println("2. Remove item");
+        System.out.println("3. Update item");
+        System.out.println("4. View all orders");
+        System.out.print("Choose an option: ");
+        String choice = scnr.nextLine().trim();
 
-        switch(input) {
-            case "add":
+        switch(choice) {
+            case "1":
                 System.out.println("Enter the name of the item: ");
                 String itemName = scnr.nextLine();
                 System.out.println("Enter a price for the item: ");
@@ -51,18 +52,18 @@ private GlobalData globalData;
                 MenuItem newItem = new MenuItem(itemName, price);
                 addMenuItem(newItem);
                 break;
-            case "remove":
+            case "2":
                 System.out.println("Enter an item to remove: ");
                 removeMenuItem(scnr.nextLine());
                 break;
-            case "update":
+            case "3":
                 System.out.println("Enter an item to update: ");
                 String itemUpdate = scnr.nextLine();
                 System.out.println("Enter a new price for the item: ");
                 int newPrice = scnr.nextInt();
                 updateMenuItem(itemUpdate, newPrice);
                 break;
-            case "view":
+            case "4":
                 viewAllOrders();
                 break;
             default:
@@ -116,13 +117,14 @@ private GlobalData globalData;
         // TODO: implement
         System.out.println("List of orders: ");
 
-        for(int i = 0; i < globalData.getOrderQueue().size(); i++) {
-
+        for(Order o: GlobalData.getOrderQueue()) {
+            System.out.println(o.getOrderId());
+            System.out.println("Address: " + o.getDeliveryAddress());
         }
     }
 
     @Override
     public String toString() {
-        return null; // TODO: implement
+        return "Admin: " + getName();
     }
 }

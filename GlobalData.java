@@ -214,9 +214,7 @@ public class GlobalData {
     }
 
     /** @return the current order queue */
-    public Queue<Order> getOrderQueue() {
-        return orderQueue;
-    }
+    public Queue<Order> getOrderQueue() { return orderQueue; }
 
     public PriorityQueue<Driver> getDriverPool() {
       return driverPool;
