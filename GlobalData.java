@@ -83,23 +83,26 @@ public class GlobalData {
         return driverPool.poll();
     }
 
-    //A collection of helper methods for development and sanity purposes on the driver pool
-    //Checks if the driver pool is empty (no available drivers)
+    /** @return true if no drivers are currently available in the pool */
     public boolean isPoolEmpty() {
         return driverPool.isEmpty();
     }
 
-    //Returns the number of available drivers in the pool
+    /** @return the number of available drivers currently in the pool */
     public int getPoolSize() {
         return driverPool.size();
     }
 
-    //Removes a specific driver from the pool
+    /**
+     * Removes a specific driver from the pool without polling the head.
+     * @param driver the driver to remove
+     * @return true if the driver was in the pool and was removed
+     */
     public boolean removeDriverFromPool(Driver driver) {
         return driverPool.remove(driver);
     }
 
-    //Peeks at the highest-rated available driver without removing them from the pool
+    /** @return the highest-rated available driver without removing them from the pool */
     public Driver peekBestDriver() {
         return driverPool.peek();
     }
@@ -158,8 +161,8 @@ public class GlobalData {
                 return admin;
             }
         }
-           return null; // no match found
-        }
+        return null; // no match found
+    }
     
 
 
@@ -188,10 +191,14 @@ public class GlobalData {
         return menu;
     }
     // --- User Lists ---
+
+    /** @param customer the Customer to add to the master customer list */
     public void addCustomer(Customer customer) {
         customers.add(customer);
     }
+
     //Ask Brandon to explain this whole globalData reference thing please
+    /** @param driver the Driver to add to the master driver list and, if available, the driver pool */
     public void addDriver(Driver driver) {
         drivers.add(driver);
         driver.setGlobalData(this);
@@ -200,15 +207,23 @@ public class GlobalData {
             addDriverToPool(driver);
         }
     }
+
+    /** @param admin the Admin to add to the master admin list */
     public void addAdmin(Admin admin) {
         admins.add(admin);
     }
+
+    /** @return the master list of all registered customers */
     public List<Customer> getCustomers() {
         return customers;
     }
+
+    /** @return the master list of all registered drivers */
     public List<Driver> getDrivers() {
         return drivers;
     }
+
+    /** @return the master list of all registered admins */
     public List<Admin> getAdmins() {
         return admins;
     }
@@ -218,7 +233,8 @@ public class GlobalData {
         return orderQueue;
     }
 
+    /** @return the priority queue of currently available drivers, ordered by rating */
     public PriorityQueue<Driver> getDriverPool() {
-      return driverPool;
+        return driverPool;
     }
 }
