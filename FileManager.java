@@ -35,7 +35,6 @@ public class FileManager {
      * @param globalData the GlobalData instance to populate
      */
     public void loadMenu(GlobalData globalData) {
-        // implement loadMenu
         try (Scanner scanner = new Scanner(new File(MENU_FILE))) {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
@@ -52,12 +51,14 @@ public class FileManager {
     }
 
     /**
-     * Reads all customers from customers.txt and adds them to GlobalData.
+     * Reads all customers from customers.txt and populates GlobalData with Customer objects.
+     * Each line must follow the format: username,password,name,address
+     * Lines that do not contain exactly 4 comma-separated fields are skipped silently.
+     * Prints a message to stdout if the file is not found rather than throwing.
      *
      * @param globalData the GlobalData instance to populate
      */
     public void loadCustomers(GlobalData globalData) {
-        // implement loadCustomers
         try (Scanner scanner = new Scanner(new File(CUSTOMERS_FILE))) {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
@@ -77,14 +78,41 @@ public class FileManager {
     
 
     /**
-     * Reads all drivers from drivers.txt and adds them to GlobalData.
-     * Parse ratings by splitting on ";".
-     * Add each available driver to the driver pool after loading.
+     * Reads all drivers from drivers.txt and populates GlobalData with Driver objects.
+     * Each line must follow the format: username,password,name,location,rating1;rating2;...
+     * Ratings are semicolon-separated integers (1–5) and are applied via addRating().
+     * Each driver is added to the driver pool via globalData.addDriver(), which automatically
+     * enqueues available drivers into the priority queue.
+     * Lines that do not contain exactly 5 comma-separated fields are skipped silently.
+     * Prints a message to stdout if the file is not found rather than throwing.
      *
      * @param globalData the GlobalData instance to populate
      */
     public void loadDrivers(GlobalData globalData) {
-        // TODO: implement
+        try (Scanner scanner = new Scanner(new File(DRIVERS_FILE))) {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                String[] parts = line.split(",");
+
+                if (parts.length == 5) {
+                    String username = parts[0].trim();
+                    String password = parts[1].trim();
+                    String name     = parts[2].trim();
+                    String location = parts[3].trim();
+
+                    Driver driver = new Driver(username, password, name, location);
+
+                    String[] ratings = parts[4].trim().split(";");
+                    for (String r : ratings) {
+                        driver.addRating(Integer.parseInt(r));
+                    }
+
+                    globalData.addDriver(driver);
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("Drivers file not found: " + DRIVERS_FILE);
+        }
     }
 
     /**
