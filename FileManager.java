@@ -197,7 +197,29 @@ public class FileManager {
      * @param globalData the GlobalData with the current driver list
      */
     public void saveDrivers(GlobalData globalData) {
-        // TODO: implement
+        // PrintWriter wraps FileWriter to give us println(); FileWriter defaults to overwrite mode
+        try (PrintWriter writer = new PrintWriter(new FileWriter(DRIVERS_FILE))) {
+            for (Driver driver : globalData.getDrivers()) { // loop through every driver
+                // build the ratings string manually as "4;3;5"
+                String ratings = "";
+                for (int r : driver.getRatings()) {
+                    if (!ratings.isEmpty()) { // add a ";" before each rating except the first
+                        ratings += ";";
+                    }
+                    ratings += r; // append the rating value
+                }
+                // write one comma-separated line per driver; println() adds the newline
+                writer.println(
+                    driver.getUsername()         + "," +
+                    driver.getPassword()         + "," +
+                    driver.getName()             + "," +
+                    driver.getCurrentLocation()  + "," +
+                    ratings);
+            }
+        } catch (IOException e) {
+            // catches errors like disk full or permission denied
+            System.out.println("Error saving drivers: " + DRIVERS_FILE);
+        }
     }
 
     /**
@@ -222,7 +244,7 @@ public class FileManager {
             }
         } catch (IOException e) {
             // catches errors like disk full or permission denied
-            System.out.println("Error saving admins.");
+            System.out.println("Error saving admins: " + ADMINS_FILE);
         }
     }
 
