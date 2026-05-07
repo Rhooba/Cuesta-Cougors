@@ -170,7 +170,19 @@ public class FileManager {
      * @param globalData the GlobalData with the current menu
      */
     public void saveMenu(GlobalData globalData) {
-        // TODO: implement
+        // PrintWriter wraps FileWriter to give us println(); FileWriter defaults to overwrite mode
+        try (PrintWriter writer = new PrintWriter(new FileWriter(MENU_FILE))) {
+            for (MenuItem item : globalData.getMenu().values()) { // loop through every item in the menu
+                // build one comma-separated line: "Burger,5.99"
+                String line =
+                        item.getItemName() + "," +
+                        item.getPrice();
+                writer.println(line); // write the line and move to the next
+            }
+        } catch (IOException e) {
+            // catches errors like disk full or permission denied
+            System.out.println("Error saving menu: " + MENU_FILE);
+        }
     }
 
     /**
