@@ -116,12 +116,31 @@ public class FileManager {
     }
 
     /**
-     * Reads all admins from admins.txt and adds them to GlobalData.
+     * Reads all admins from admins.txt and populates GlobalData with Admin objects.
+     * Each line must follow the format: username,password,name
+     * Lines that do not contain exactly 3 comma-separated fields are skipped silently.
+     * Prints a message to stdout if the file is not found rather than throwing.
      *
      * @param globalData the GlobalData instance to populate
      */
     public void loadAdmins(GlobalData globalData) {
-        // TODO: implement
+        try (Scanner scanner = new Scanner(new File(ADMINS_FILE))) {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                String[] parts = line.split(",");
+
+                if (parts.length == 3) {
+                    String username = parts[0].trim();
+                    String password = parts[1].trim();
+                    String name     = parts[2].trim();
+
+                    Admin admin = new Admin(username, password, name);
+                    globalData.addAdmin(admin);
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("Admin file not found: " + ADMINS_FILE);
+        }
     }
 
     /**
