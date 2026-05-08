@@ -160,7 +160,19 @@ public class FileManager {
      * @param order the Order to append
      */
     public void appendOrder(Order order) {
-        // TODO: implement — use FileWriter with append = true
+        // second argument "true" enables append mode — existing entries are NOT overwritten
+        try (PrintWriter writer = new PrintWriter(new FileWriter(ORDERS_FILE, true))) {
+            // build one comma-separated line for this order
+            String line =
+                    order.getOrderId()                + "," +
+                    order.getCustomer().getUsername() + "," +
+                    order.getStatus()                 + "," +
+                    order.getTotal();
+            writer.println(line); // write the line and move to the next
+        } catch (IOException e) {
+            // catches errors like disk full or permission denied
+            System.out.println("Error appending order: " + ORDERS_FILE);
+        }
     }
 
     /**
