@@ -195,6 +195,7 @@ public class GlobalData {
     /** @param customer the Customer to add to the master customer list */
     public void addCustomer(Customer customer) {
         customers.add(customer);
+        customer.setGlobalData(this);
     }
 
     //Ask Brandon to explain this whole globalData reference thing please

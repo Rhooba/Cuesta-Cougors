@@ -13,6 +13,7 @@ public class Customer extends User {
 
     private List<Order> orderHistory;
     private String deliveryAddress;
+    private GlobalData globalData;
 
     /**
      * Constructs a Customer with the given credentials and delivery address.
@@ -67,10 +68,50 @@ public class Customer extends User {
      * @param items the list of MenuItems the customer is ordering
      * @return the newly created Order object
      */
-    public Order placeOrder(List<MenuItem> items) {
-        // place new order by customer
-        System.out.println("Select menu items to order:");
-        return null; 
+    public Order placeOrder(Scanner scanner, List<MenuItem> items) {
+        // convert the menu HashMap values into an indexed list so we can display by number
+        List<MenuItem> menuList = new ArrayList<>(globalData.getMenu().values());
+
+        System.out.println("\n--- Menu ---");
+
+        // print each item with a number so the customer can pick by index
+        for (int i = 0; i < menuList.size(); i++) {
+            System.out.println((i + 1) + ". " + menuList.get(i).toString());
+        }
+
+        List<MenuItem> selectedItems = new ArrayList<>(); // holds the items the customer picks
+
+        System.out.println("Enter item number to add, or type done to finish: ");
+        String input = scanner.nextLine().trim();
+
+        // keep adding items until the customer types "done"
+        while (!input.equals("done")) {
+            int choice = Integer.parseInt(input) - 1; // convert "1" to index 0, "2" to index 1, etc.
+
+            if (choice >= 0 && choice < menuList.size()) { // make sure the number is valid
+                MenuItem selected = menuList.get(choice);  // look up the item by index
+                selectedItems.add(selected);
+                System.out.println(selected.getItemName() + " added.");
+            } else {
+                System.out.println("Invalid Selection.");
+            }
+
+            System.out.println("Add another item or type done to finish: ");
+            input = scanner.nextLine().trim();
+        }
+
+        System.out.println("\n--- Order Summary ---");
+
+        for (MenuItem item : selectedItems) {
+            System.out.println(item.toString());
+        }
+
+        // create the order with this customer, their selected items, and their saved address
+        Order order = new Order(this, selectedItems, deliveryAddress);
+        orderHistory.add(order);          // save to this customer's history
+        globalData.enqueueOrder(order);   // add to the system queue for processing
+        System.out.println("Your order has been placed. Order Total: $" + order.getTotal());
+        return order;
     }
 
     /**
@@ -118,6 +159,10 @@ public class Customer extends User {
     public void setDeliveryAddress(String deliveryAddress) {
         // set the delivery address
         this.deliveryAddress = deliveryAddress;
+    }
+
+    public void setGlobalData(GlobalData globalData) {
+        this.globalData = globalData;
     }
 
     /** @return the customer's order history */
