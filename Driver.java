@@ -56,7 +56,7 @@ public class Driver extends User implements Comparable<Driver> {
      * Check that an order is actually assigned before updating.
      */
     public void markInProgress() {
-        // TODO: implement
+        assignedOrder.setStatus(OrderStatus.PICKED_UP);
     }
 
     /**
@@ -65,8 +65,10 @@ public class Driver extends User implements Comparable<Driver> {
      * Set assignedOrder to null after completion.
      */
     public void markDelivered() {
-        // TODO: implement
-        // Steps: set status, set isAvailable, clear assignedOrder, re-add to pool
+        assignedOrder.setStatus(OrderStatus.DELIVERED); // mark the order as delivered
+        isAvailable = true;                             // driver is now free to take new orders
+        assignedOrder = null;                           // clear the order reference
+        globalData.addDriverToPool(this);               // re-add this driver to the available pool
     }
 
     /**
@@ -184,6 +186,10 @@ public class Driver extends User implements Comparable<Driver> {
 
     @Override
     public String toString() {
-        return null; // TODO: implement
+        return getUsername()    + " | " +
+               getName()       + " | " +
+               currentLocation + " | " +
+               averageRating   + " | " +
+               isAvailable;
     }
 }
