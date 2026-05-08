@@ -77,11 +77,11 @@ private GlobalData globalData;
      * @param item the MenuItem to add
      */
     public void addMenuItem(MenuItem item) {
-        if(globalData.menu.containsKey(item.getItemName())) {
+        if(globalData.getMenuItem(item.getItemName()) != null) {
             System.out.println("Item is already on the menu");
         }
         else {
-            globalData.menu.put(item.getItemName(), item);
+            globalData.addMenuItem(item);
         }
     }
 
@@ -91,7 +91,7 @@ private GlobalData globalData;
      * @param itemName the name of the item to remove
      */
     public void removeMenuItem(String itemName) {
-        if(globalData.menu.containsKey(itemName)) globalData.menu.remove(itemName);
+        if(globalData.getMenuItem(itemName) != null) globalData.removeMenuItem(itemName);
         else System.out.println("Item already does not exist");
     }
 
@@ -102,8 +102,9 @@ private GlobalData globalData;
      * @param newPrice the new price to assign
      */
     public void updateMenuItem(String itemName, double newPrice) {
-        if(globalData.menu.containsKey(itemName)) {
-            globalData.menu.get(itemName).setPrice(newPrice);
+        MenuItem item = globalData.getMenuItem(itemName);
+        if(item != null) {
+            item.setPrice(newPrice);
         }
         else {
             System.out.println("Item is not on the menu");

@@ -47,8 +47,43 @@ public class Driver extends User implements Comparable<Driver> {
      * @param scnr the shared Scanner for reading user input
      */
     @Override
-    public void getDashboard(Scanner scnr) {
-        // TODO: implement
+    public void getDashboard(Scanner scanner) {
+        // print the menu options for the driver to choose from
+        System.out.println("\n--- Driver Dashboard ---");
+        System.out.println("1. View assigned order");
+        System.out.println("2. Mark order in progress");
+        System.out.println("3. Mark order delivered");
+        System.out.println("4. Logout");
+        System.out.print("Choose an option: ");
+
+        // read the driver's input and remove any extra spaces with trim()
+        String choice = scanner.nextLine().trim();
+
+        // switch checks the value of choice and runs the matching case
+        switch (choice) {
+            case "1":
+                // assignedOrder is null if no order has been assigned yet
+                if (assignedOrder != null) {
+                    System.out.println(assignedOrder.toString()); // print order details
+                } else {
+                    System.out.println("No order currently assigned.");
+                }
+                break; // break stops the switch from falling through to the next case
+            case "2":
+                markInProgress();                          // sets order status to PICKED_UP
+                System.out.println("Your order is in progress.");
+                break;
+            case "3":
+                markDelivered();                           // sets status to DELIVERED, frees driver
+                System.out.println("Your order has been delivered!");
+                break;
+            case "4":
+                System.out.println("Logging out...");      // main loop handles the actual logout
+                break;
+            default:
+                // runs if the input didn't match any of the cases above
+                System.out.println("Invalid option.");
+        }
     }
 
     /**
@@ -56,7 +91,7 @@ public class Driver extends User implements Comparable<Driver> {
      * Check that an order is actually assigned before updating.
      */
     public void markInProgress() {
-        // TODO: implement
+        assignedOrder.setStatus(OrderStatus.PICKED_UP);
     }
 
     /**
@@ -65,8 +100,10 @@ public class Driver extends User implements Comparable<Driver> {
      * Set assignedOrder to null after completion.
      */
     public void markDelivered() {
-        // TODO: implement
-        // Steps: set status, set isAvailable, clear assignedOrder, re-add to pool
+        assignedOrder.setStatus(OrderStatus.DELIVERED); // mark the order as delivered
+        isAvailable = true;                             // driver is now free to take new orders
+        assignedOrder = null;                           // clear the order reference
+        globalData.addDriverToPool(this);               // re-add this driver to the available pool
     }
 
     /**
@@ -184,6 +221,10 @@ public class Driver extends User implements Comparable<Driver> {
 
     @Override
     public String toString() {
-        return null; // TODO: implement
+        return getUsername()    + " | " +
+               getName()       + " | " +
+               currentLocation + " | " +
+               averageRating   + " | " +
+               isAvailable;
     }
 }

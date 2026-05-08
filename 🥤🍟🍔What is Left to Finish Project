@@ -1,0 +1,24 @@
+Please write your name next to the items you have completed!
+
+Driver.java
+
+Constructor — complete remaining initialization (line 40)
+toString() — currently returns null, needs to return formatted driver info
+
+
+Admin.java
+
+Constructor — Admin-specific initialization (line 28)
+viewAllOrders() — empty body, needs to loop through all orders and display them (line 117)
+toString() — currently returns null (line 127)
+
+
+Customer.java
+
+toString() — currently returns null (line 73)
+
+
+General
+
+End-to-end integration testing once all methods are implemented
+Confirm order flow works: PLACED → ASSIGNED → PICKED_UP → DELIVERED
