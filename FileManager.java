@@ -154,8 +154,10 @@ public class FileManager {
     }
 
     /**
-     * Appends a single order to orders.txt.
-     * Use append mode so existing entries are not overwritten.
+     * Appends a single order to orders.txt as a new line, preserving all existing entries.
+     * Each order is written in the format: orderId,customerUsername,status,total
+     * Uses FileWriter in append mode (true) so previous orders are never overwritten.
+     * Prints a message to stdout if the file cannot be written rather than throwing.
      *
      * @param order the Order to append
      */
