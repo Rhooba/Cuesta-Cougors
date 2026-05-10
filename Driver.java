@@ -37,7 +37,7 @@ public class Driver extends User implements Comparable<Driver> {
         this.isAvailable = true;
         this.averageRating = 0.0;
         this.assignedOrder = null;
-        // TODO: implement remaining initialization
+        this.currentLocation = currentLocation;
     }
 
     /**

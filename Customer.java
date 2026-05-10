@@ -46,8 +46,7 @@ public class Customer extends User {
 
         switch (choice) {
             case "1":
-                // TODO: build item selection flow
-                System.out.println("Place order coming soon!");
+                placeOrder(scnr, null);
                 break;
             case "2":
                 viewOrderHistory();

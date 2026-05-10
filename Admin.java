@@ -25,7 +25,6 @@ private GlobalData globalData;
      */
     public Admin(String username, String password, String name) {
         super(username, password, name);
-        // TODO: implement any Admin-specific initialization
     }
 
     /**
@@ -115,12 +114,12 @@ private GlobalData globalData;
      * Displays all orders currently in the system.
      */
     public void viewAllOrders() {
-        // TODO: implement
         System.out.println("List of orders: ");
 
+        // loop through every order currently in the queue
         for(Order o: globalData.getOrderQueue()) {
-            System.out.println(o.getOrderId());
-            System.out.println("Address: " + o.getDeliveryAddress());
+            // toString() prints a formatted summary: Order #ID | Customer | Status | Total
+            System.out.println(o.toString());
         }
     }
 
