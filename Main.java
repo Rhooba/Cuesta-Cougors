@@ -63,7 +63,7 @@ public class Main {
 
                 case "2":
                     // --- Account creation flow ---
-                    System.out.println("Account type — (1) Customer  (2) Driver");
+                    System.out.println("Account type — (1) Customer  (2) Driver  (3) Admin");
                     System.out.print("Choose: ");
                     String type = scanner.nextLine().trim();
 
@@ -86,6 +86,9 @@ public class Main {
                         String location = scanner.nextLine();
                         Driver d = accountCreation.createDriver(newUsername, newPassword, newName, location);
                         System.out.println(d != null ? "Driver account created! Please log in." : "Username already taken.");
+                    } else if (type.equals("3")) {
+                        Admin a = accountCreation.createAdmin(newUsername, newPassword, newName);
+                        System.out.println(a != null ? "Admin account created! Please log in." : "Username already taken.");
                     } else {
                         System.out.println("Invalid option.");
                     }
