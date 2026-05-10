@@ -47,7 +47,8 @@ private GlobalData globalData;
                 System.out.println("Enter the name of the item: ");
                 String itemName = scnr.nextLine();
                 System.out.println("Enter a price for the item: ");
-                int price = scnr.nextInt();
+                double price = scnr.nextDouble();
+                scnr.nextLine(); // consume the leftover newline after nextDouble()
                 MenuItem newItem = new MenuItem(itemName, price);
                 addMenuItem(newItem);
                 break;
@@ -59,7 +60,8 @@ private GlobalData globalData;
                 System.out.println("Enter an item to update: ");
                 String itemUpdate = scnr.nextLine();
                 System.out.println("Enter a new price for the item: ");
-                int newPrice = scnr.nextInt();
+                double newPrice = scnr.nextDouble();
+                scnr.nextLine(); // consume the leftover newline after nextDouble()
                 updateMenuItem(itemUpdate, newPrice);
                 break;
             case "4":
