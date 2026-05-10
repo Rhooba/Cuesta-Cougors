@@ -33,42 +33,54 @@ private GlobalData globalData;
      */
     @Override
     public void getDashboard(Scanner scnr) {
+        while (true) {
+            System.out.println("\n--- Admin Dashboard ---");
+            System.out.println("1. Add item");
+            System.out.println("2. Remove item");
+            System.out.println("3. Update item");
+            System.out.println("4. View all orders");
+            System.out.println("5. View menu");
+            System.out.println("6. Logout");
+            System.out.print("Choose an option: ");
+            String choice = scnr.nextLine().trim();
 
-        System.out.println("\n--- Admin Dashboard ---");
-        System.out.println("1. Add item");
-        System.out.println("2. Remove item");
-        System.out.println("3. Update item");
-        System.out.println("4. View all orders");
-        System.out.print("Choose an option: ");
-        String choice = scnr.nextLine().trim();
-
-        switch(choice) {
-            case "1":
-                System.out.println("Enter the name of the item: ");
-                String itemName = scnr.nextLine();
-                System.out.println("Enter a price for the item: ");
-                double price = scnr.nextDouble();
-                scnr.nextLine(); // consume the leftover newline after nextDouble()
-                MenuItem newItem = new MenuItem(itemName, price);
-                addMenuItem(newItem);
-                break;
-            case "2":
-                System.out.println("Enter an item to remove: ");
-                removeMenuItem(scnr.nextLine());
-                break;
-            case "3":
-                System.out.println("Enter an item to update: ");
-                String itemUpdate = scnr.nextLine();
-                System.out.println("Enter a new price for the item: ");
-                double newPrice = scnr.nextDouble();
-                scnr.nextLine(); // consume the leftover newline after nextDouble()
-                updateMenuItem(itemUpdate, newPrice);
-                break;
-            case "4":
-                viewAllOrders();
-                break;
-            default:
-                System.out.println("Please return a valid operation");
+            switch(choice) {
+                case "1":
+                    System.out.println("Enter the name of the item: ");
+                    String itemName = scnr.nextLine();
+                    System.out.println("Enter a price for the item: ");
+                    double price = scnr.nextDouble();
+                    scnr.nextLine(); // consume the leftover newline after nextDouble()
+                    MenuItem newItem = new MenuItem(itemName, price);
+                    addMenuItem(newItem);
+                    break;
+                case "2":
+                    System.out.println("Enter an item to remove: ");
+                    removeMenuItem(scnr.nextLine());
+                    break;
+                case "3":
+                    System.out.println("Enter an item to update: ");
+                    String itemUpdate = scnr.nextLine();
+                    System.out.println("Enter a new price for the item: ");
+                    double newPrice = scnr.nextDouble();
+                    scnr.nextLine(); // consume the leftover newline after nextDouble()
+                    updateMenuItem(itemUpdate, newPrice);
+                    break;
+                case "4":
+                    viewAllOrders();
+                    break;
+                case "5":
+                    System.out.println("\n--- Current Menu ---");
+                    for (MenuItem item : globalData.getMenu().values()) {
+                        System.out.println(item.toString());
+                    }
+                    break;
+                case "6":
+                    System.out.println("Logging out...");
+                    return; // exit the method, returning control to the main loop
+                default:
+                    System.out.println("Please return a valid operation");
+            }
         }
     }
 

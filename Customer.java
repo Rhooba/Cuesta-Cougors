@@ -37,25 +37,27 @@ public class Customer extends User {
      */
     @Override
     public void getDashboard(Scanner scnr) {
-        System.out.println("\n--- Customer Dashboard ---");
-        System.out.println("1. Place Order");
-        System.out.println("2. View Order History");
-        System.out.println("3. Logout");
-        System.out.print("Choose an option: ");
-        String choice = scnr.nextLine().trim();
+        while (true) {
+            System.out.println("\n--- Customer Dashboard ---");
+            System.out.println("1. Place Order");
+            System.out.println("2. View Order History");
+            System.out.println("3. Logout");
+            System.out.print("Choose an option: ");
+            String choice = scnr.nextLine().trim();
 
-        switch (choice) {
-            case "1":
-                placeOrder(scnr, null);
-                break;
-            case "2":
-                viewOrderHistory();
-                break;
-            case "3":
-                System.out.println("Logging out...");
-                break;
-            default:
-                System.out.println("Invalid option.");
+            switch (choice) {
+                case "1":
+                    placeOrder(scnr, null);
+                    break;
+                case "2":
+                    viewOrderHistory();
+                    break;
+                case "3":
+                    System.out.println("Logging out...");
+                    return;
+                default:
+                    System.out.println("Invalid option.");
+            }
         }
     }
 
