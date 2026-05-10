@@ -118,7 +118,7 @@ private GlobalData globalData;
         // TODO: implement
         System.out.println("List of orders: ");
 
-        for(Order o: GlobalData.getOrderQueue()) {
+        for(Order o: globalData.getOrderQueue()) {
             System.out.println(o.getOrderId());
             System.out.println("Address: " + o.getDeliveryAddress());
         }
