@@ -212,6 +212,7 @@ public class GlobalData {
     /** @param admin the Admin to add to the master admin list */
     public void addAdmin(Admin admin) {
         admins.add(admin);
+        admin.setGlobalData(this);
     }
 
     /** @return the master list of all registered customers */
