@@ -20,6 +20,7 @@ public class Main {
         // Initialize the central data store and file I/O handler
         GlobalData globalData   = new GlobalData();
         FileManager fileManager = new FileManager();
+        globalData.setFileManager(fileManager); // give GlobalData a reference so it can pass fileManager down to customers
         AccountCreation accountCreation = new AccountCreation(globalData, fileManager);
 
         // Load all persisted data (menu, users, drivers) from text files

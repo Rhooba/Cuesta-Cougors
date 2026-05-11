@@ -34,13 +34,13 @@ public class AccountCreation {
      * @return the newly created Customer, or null if the username already exists
      */
     public Customer createCustomer(String username, String password, String name, String deliveryAddress) {
-        if (usernameExists(username)) {
+        if (usernameExists(username)) {  // reject if someone already has this username
             return null;
         }
-        Customer customer = new Customer(username, password, name, deliveryAddress);
-        globalData.addCustomer(customer);
-        fileManager.saveCustomers(globalData);
-        return customer;
+        Customer customer = new Customer(username, password, name, deliveryAddress); // build the object
+        globalData.addCustomer(customer);       // register in the live system
+        fileManager.saveCustomers(globalData);  // write updated list to customers.txt
+        return customer;                        // return so the caller can confirm success
     }
 
     /**
@@ -55,13 +55,13 @@ public class AccountCreation {
      * @return the newly created Driver, or null if the username already exists
      */
     public Driver createDriver(String username, String password, String name, String currentLocation) {
-        if (usernameExists(username)) {
+        if (usernameExists(username)) {  // reject if username is taken
             return null;
         }
-        Driver driver = new Driver(username, password, name, currentLocation);
-        globalData.addDriver(driver);
-        globalData.addDriverToPool(driver);
-        fileManager.saveDrivers(globalData);
+        Driver driver = new Driver(username, password, name, currentLocation); // build the object
+        globalData.addDriver(driver);        // addDriver internally calls addDriverToPool if available
+        globalData.addDriverToPool(driver);  // also explicitly add to pool so they can receive orders right away
+        fileManager.saveDrivers(globalData); // persist updated driver list to drivers.txt
         return driver;
     }
 
@@ -76,12 +76,12 @@ public class AccountCreation {
      * @return the newly created Admin, or null if the username already exists
      */
     public Admin createAdmin(String username, String password, String name) {
-        if (usernameExists(username)) {
+        if (usernameExists(username)) {  // reject if username is taken
             return null;
         }
-        Admin admin = new Admin(username, password, name);
-        globalData.addAdmin(admin);
-        fileManager.saveAdmins(globalData);
+        Admin admin = new Admin(username, password, name); // build the object
+        globalData.addAdmin(admin);          // register in the live system
+        fileManager.saveAdmins(globalData);  // persist updated admin list to admins.txt
         return admin;
     }
 
@@ -92,22 +92,25 @@ public class AccountCreation {
      * @return true if already in use, false if available
      */
     public boolean usernameExists(String username) {
+        // search every customer — usernames must be unique across ALL user types, not just within one group
         for (Customer customer : globalData.getCustomers()) {
             if (customer.getUsername().equals(username)) {
-                return true;
+                return true; // found a match, stop searching
             }
         }
+        // search every driver
         for (Driver driver : globalData.getDrivers()) {
             if (driver.getUsername().equals(username)) {
                 return true;
             }
         }
+        // search every admin
         for (Admin admin : globalData.getAdmins()) {
             if (admin.getUsername().equals(username)) {
                 return true;
             }
         }
-        return false; // username is available
+        return false; // made it through all lists with no match — username is available
     }
 
     /**
@@ -118,9 +121,10 @@ public class AccountCreation {
      * @return true if valid, false otherwise
      */
     public boolean isValidPassword(String password) {
+        // null check first — calling .length() on null would crash with a NullPointerException
         if (password == null || password.length() < 6) {
-            return false;
+            return false; // password is missing or too short
         }
-        return true;
+        return true; // password passes minimum requirements
     }
 }

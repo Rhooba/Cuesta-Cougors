@@ -14,6 +14,7 @@ public class Customer extends User {
     private List<Order> orderHistory;
     private String deliveryAddress;
     private GlobalData globalData;
+    private FileManager fileManager;
 
     /**
      * Constructs a Customer with the given credentials and delivery address.
@@ -140,8 +141,9 @@ public class Customer extends User {
         // create the order with this customer, their selected items, and their saved address
         Order order = new Order(this, selectedItems, deliveryAddress);
         orderHistory.add(order);          // save to this customer's history
-        globalData.enqueueOrder(order);   // add to the system queue for processing
-        globalData.processNextOrder();    // immediately assign the order to the best available driver
+        globalData.enqueueOrder(order);      // add to the system queue for processing
+        globalData.processNextOrder();       // immediately assign the order to the best available driver
+        fileManager.appendOrder(order);      // log the order to orders.txt after dispatch so status reflects ACCEPTED
         System.out.println("Your order has been placed. Order Total: $" + order.getTotal());
         if (order.getAssignedDriver() != null) {
             System.out.println("Your driver is: " + order.getAssignedDriver().getName());
@@ -200,6 +202,10 @@ public class Customer extends User {
 
     public void setGlobalData(GlobalData globalData) {
         this.globalData = globalData;
+    }
+
+    public void setFileManager(FileManager fileManager) {
+        this.fileManager = fileManager;
     }
 
     /** @return the customer's order history */

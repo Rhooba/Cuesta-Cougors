@@ -130,15 +130,17 @@ public class Driver extends User implements Comparable<Driver> {
 
     
     public void addRating(int rating) {
+        // reject anything outside the 1–5 range before it corrupts the average
         if (rating < 1 || rating > 5) {
             throw new IllegalArgumentException("Rating must be between 1 and 5.");
         }
 
+        // if the list is full, drop the oldest rating to make room — this is a sliding window
         if (ratings.size() >= MAX_RATINGS) {
-            ratings.removeFirst();
+            ratings.removeFirst(); // removeFirst() removes the oldest entry (front of the LinkedList)
         }
-        ratings.add(rating);
-        calculateAverageRating();
+        ratings.add(rating);       // add the new rating to the back of the list
+        calculateAverageRating();  // recompute the average with the updated list
     }
 
     /**
@@ -148,14 +150,16 @@ public class Driver extends User implements Comparable<Driver> {
      * @return the computed average, or 0.0 if no ratings exist
      */
     public double calculateAverageRating() {
+        // if there are no ratings yet, average is 0 — avoid divide-by-zero
         if (ratings.isEmpty()) {
             averageRating = 0.0;
             return 0.0;
         }
         int sum = 0;
         for (int rating : ratings) {
-            sum += rating;
+            sum += rating; // add each rating to the running total
         }
+        // cast sum to double before dividing so we get a decimal result, not an integer
         averageRating = (double) sum / ratings.size();
         return averageRating;
     }
@@ -170,6 +174,8 @@ public class Driver extends User implements Comparable<Driver> {
      */
     @Override
     public int compareTo(Driver other) {
+        // PriorityQueue is a min-heap by default (lowest value comes out first)
+        // by putting "other" before "this" we reverse the order so higher ratings come out first
         return Double.compare(other.averageRating, this.averageRating);
     }
 

@@ -90,11 +90,11 @@ private GlobalData globalData;
      * @param item the MenuItem to add
      */
     public void addMenuItem(MenuItem item) {
-        if(globalData.getMenuItem(item.getItemName()) != null) {
+        // getMenuItem returns null if the item doesn't exist — if it's NOT null, it's already there
+        if (globalData.getMenuItem(item.getItemName()) != null) {
             System.out.println("Item is already on the menu");
-        }
-        else {
-            globalData.addMenuItem(item);
+        } else {
+            globalData.addMenuItem(item); // store in the menu HashMap keyed by item name
         }
     }
 
@@ -104,8 +104,12 @@ private GlobalData globalData;
      * @param itemName the name of the item to remove
      */
     public void removeMenuItem(String itemName) {
-        if(globalData.getMenuItem(itemName) != null) globalData.removeMenuItem(itemName);
-        else System.out.println("Item already does not exist");
+        // make sure the item exists before trying to remove it
+        if (globalData.getMenuItem(itemName) != null) {
+            globalData.removeMenuItem(itemName); // removes from the menu HashMap by name
+        } else {
+            System.out.println("Item already does not exist");
+        }
     }
 
     /**
@@ -115,11 +119,10 @@ private GlobalData globalData;
      * @param newPrice the new price to assign
      */
     public void updateMenuItem(String itemName, double newPrice) {
-        MenuItem item = globalData.getMenuItem(itemName);
-        if(item != null) {
-            item.setPrice(newPrice);
-        }
-        else {
+        MenuItem item = globalData.getMenuItem(itemName); // look up the item by name
+        if (item != null) {
+            item.setPrice(newPrice); // directly update the price on the object — no need to re-add it
+        } else {
             System.out.println("Item is not on the menu");
         }
     }
@@ -129,11 +132,9 @@ private GlobalData globalData;
      */
     public void viewAllOrders() {
         System.out.println("List of orders: ");
-
-        // loop through every order currently in the queue
-        for(Order o: globalData.getOrderQueue()) {
-            // toString() prints a formatted summary: Order #ID | Customer | Status | Total
-            System.out.println(o.toString());
+        // getOrderQueue() returns the live queue — iterating it does NOT remove the orders
+        for (Order o : globalData.getOrderQueue()) {
+            System.out.println(o.toString()); // prints: Order #ID | Customer | Status | Driver | Total
         }
     }
 

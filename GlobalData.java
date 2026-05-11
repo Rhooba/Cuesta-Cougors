@@ -27,6 +27,7 @@ public class GlobalData {
     private List<Customer> customers;
     private List<Driver>   drivers;
     private List<Admin>    admins;
+    private FileManager fileManager;
 
     /**
      * Constructs a GlobalData instance and initializes all data structures.
@@ -47,8 +48,7 @@ public class GlobalData {
      * Adds a new order to the back of the order queue.
      */
     public void enqueueOrder(Order order) {
-        orderQueue.offer(order);
-        
+        orderQueue.offer(order); // offer() adds the order to the back of the line
     }
 
     /**
@@ -71,8 +71,9 @@ public class GlobalData {
      * Adds an available driver to the driver pool.
      */
     public void addDriverToPool(Driver driver) {
+        // only add the driver if they actually exist and are currently free
         if (driver != null && driver.isAvailable()) {
-            driverPool.offer(driver);
+            driverPool.offer(driver); // offer() inserts into the PriorityQueue; position is based on compareTo (rating)
         }
     }
 
@@ -116,21 +117,26 @@ public class GlobalData {
      * Print a message if no drivers are currently available.
      */
     public void processNextOrder() {
+        // stop early if there are no orders waiting
         if (orderQueue.isEmpty()) {
             System.out.println("No orders in the queue.");
             return;
         }
-        
+
+        // poll() removes and returns the highest-rated available driver; null if pool is empty
         Driver driver = getBestDriver();
         if (driver == null) {
             System.out.println("No drivers available at the moment. Please wait...");
             return;
         }
-        
+
+        // pull the next order off the front of the queue
         Order order = dequeueOrder();
+
+        // link the driver and order to each other
         driver.setAssignedOrder(order);
-        driver.setAvailable(false);
-        order.setAssignedDriver(driver);
+        driver.setAvailable(false);       // mark driver as busy so they leave the pool
+        order.setAssignedDriver(driver);  // store which driver got this order
         order.setStatus(OrderStatus.ACCEPTED);
         System.out.println("Order # " + order.getOrderId() + " assigned to driver " + driver.getName());
     }
@@ -144,24 +150,28 @@ public class GlobalData {
      * @return the matching User, or null if not found or password is wrong
      */
     public User login(String username, String inputPassword) {
+        // check every customer — if username matches and password is correct, return that user
         for (Customer customer : customers) {
             if (customer.getUsername().equals(username) && customer.login(inputPassword)) {
                 return customer;
             }
         }
 
+        // same check for drivers
         for (Driver driver : drivers) {
-            if(driver.getUsername().equals(username) && driver.login(inputPassword)) {
+            if (driver.getUsername().equals(username) && driver.login(inputPassword)) {
                 return driver;
             }
         }
 
+        // same check for admins
         for (Admin admin : admins) {
-            if(admin.getUsername().equals(username) && admin.login(inputPassword)) {
+            if (admin.getUsername().equals(username) && admin.login(inputPassword)) {
                 return admin;
             }
         }
-        return null; // no match found
+
+        return null; // no match found across any user type
     }
     
 
@@ -195,17 +205,16 @@ public class GlobalData {
     /** @param customer the Customer to add to the master customer list */
     public void addCustomer(Customer customer) {
         customers.add(customer);
-        customer.setGlobalData(this);
+        customer.setGlobalData(this);       // give customer access to the live data store
+        customer.setFileManager(fileManager); // give customer access to file I/O so it can log orders
     }
 
-    //Ask Brandon to explain this whole globalData reference thing please
     /** @param driver the Driver to add to the master driver list and, if available, the driver pool */
     public void addDriver(Driver driver) {
-        drivers.add(driver);
-        driver.setGlobalData(this);
-        // Add driver to pool since they start as available
+        drivers.add(driver);                 // add to the permanent master list
+        driver.setGlobalData(this);          // give the driver a reference back to GlobalData so they can call addDriverToPool when they finish a delivery
         if (driver.isAvailable()) {
-            addDriverToPool(driver);
+            addDriverToPool(driver);         // if they're free, also put them in the priority queue for order dispatch
         }
     }
 
@@ -228,6 +237,11 @@ public class GlobalData {
     /** @return the master list of all registered admins */
     public List<Admin> getAdmins() {
         return admins;
+    }
+
+    /** @param fileManager the FileManager instance to use for order persistence */
+    public void setFileManager(FileManager fileManager) {
+        this.fileManager = fileManager;
     }
 
     /** @return the current order queue */

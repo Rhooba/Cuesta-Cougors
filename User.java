@@ -41,11 +41,11 @@ public abstract class User {
      * @return true if the password matches, false otherwise
      */
     public boolean login(String inputPassword) {
-        if(inputPassword.equals(this.password)) {
-            return true;
-        }
-        else {
-            return false;
+        // .equals() compares the actual text content; == would only check if they're the same object in memory
+        if (inputPassword.equals(this.password)) {
+            return true;  // password matches — login succeeds
+        } else {
+            return false; // wrong password
         }
     }
 

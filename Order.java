@@ -38,15 +38,15 @@ public class Order {
      * @param deliveryAddress destination for the order
      */
     public Order(Customer customer, List<MenuItem> items, String deliveryAddress) {
-        this.orderId = nextId++;
-        this.status  = OrderStatus.PLACED;
+        this.orderId = nextId++; // grab the current ID and immediately increment for the next order
+        this.status  = OrderStatus.PLACED; // every new order starts in the PLACED state
 
         this.customer = customer;
         this.items = items;
         this.deliveryAddress = deliveryAddress;
-        this.assignedDriver = null;
+        this.assignedDriver = null; // no driver yet — assigned later by processNextOrder()
 
-        this.total = calculateTotal();
+        this.total = calculateTotal(); // compute and cache the total at construction time
     }
 
     /**
@@ -61,7 +61,7 @@ public class Order {
     public double calculateTotal() {
         double sum = 0.0;
         for (MenuItem item : items) {
-            sum += item.getPrice();
+            sum += item.getPrice(); // add each item's price to the running total
         }
         return sum;
     }
