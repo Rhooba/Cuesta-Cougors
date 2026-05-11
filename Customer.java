@@ -41,7 +41,8 @@ public class Customer extends User {
             System.out.println("\n--- Customer Dashboard ---");
             System.out.println("1. Place Order");
             System.out.println("2. View Order History");
-            System.out.println("3. Logout");
+            System.out.println("3. Rate a Driver");
+            System.out.println("4. Logout");
             System.out.print("Choose an option: ");
             String choice = scnr.nextLine().trim();
 
@@ -53,6 +54,35 @@ public class Customer extends User {
                     viewOrderHistory();
                     break;
                 case "3":
+                    // collect only orders that have been delivered
+                    List<Order> deliveredOrders = new ArrayList<>();
+                    for (Order o : orderHistory) {
+                        if (o.getStatus() == OrderStatus.DELIVERED) {
+                            deliveredOrders.add(o);
+                        }
+                    }
+                    if (deliveredOrders.isEmpty()) {
+                        System.out.println("No delivered orders to rate.");
+                        break;
+                    }
+                    // display delivered orders numbered for selection
+                    System.out.println("\n--- Delivered Orders ---");
+                    for (int i = 0; i < deliveredOrders.size(); i++) {
+                        System.out.println((i + 1) + ". " + deliveredOrders.get(i).toString());
+                    }
+                    System.out.print("Pick an order to rate (number): ");
+                    int orderChoice = Integer.parseInt(scnr.nextLine().trim()) - 1;
+                    if (orderChoice < 0 || orderChoice >= deliveredOrders.size()) {
+                        System.out.println("Invalid selection.");
+                        break;
+                    }
+                    Order selectedOrder = deliveredOrders.get(orderChoice);
+                    System.out.print("Enter a rating (1-5): ");
+                    int rating = Integer.parseInt(scnr.nextLine().trim());
+                    rateDriver(selectedOrder.getAssignedDriver(), rating);
+                    System.out.println("Rating submitted.");
+                    break;
+                case "4":
                     System.out.println("Logging out...");
                     return;
                 default:

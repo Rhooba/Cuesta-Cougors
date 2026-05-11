@@ -40,7 +40,8 @@ private GlobalData globalData;
             System.out.println("3. Update item");
             System.out.println("4. View all orders");
             System.out.println("5. View menu");
-            System.out.println("6. Logout");
+            System.out.println("6. Dispatch next order");
+            System.out.println("7. Logout");
             System.out.print("Choose an option: ");
             String choice = scnr.nextLine().trim();
 
@@ -76,6 +77,9 @@ private GlobalData globalData;
                     }
                     break;
                 case "6":
+                    globalData.processNextOrder();
+                    break;
+                case "7":
                     System.out.println("Logging out...");
                     return; // exit the method, returning control to the main loop
                 default:

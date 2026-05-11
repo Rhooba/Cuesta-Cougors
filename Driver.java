@@ -93,6 +93,10 @@ public class Driver extends User implements Comparable<Driver> {
      * Check that an order is actually assigned before updating.
      */
     public void markInProgress() {
+        if (assignedOrder == null) {
+            System.out.println("No order currently assigned.");
+            return;
+        }
         assignedOrder.setStatus(OrderStatus.PICKED_UP);
     }
 
@@ -102,6 +106,10 @@ public class Driver extends User implements Comparable<Driver> {
      * Set assignedOrder to null after completion.
      */
     public void markDelivered() {
+        if (assignedOrder == null) {
+            System.out.println("No order currently assigned.");
+            return;
+        }
         assignedOrder.setStatus(OrderStatus.DELIVERED); // mark the order as delivered
         isAvailable = true;                             // driver is now free to take new orders
         assignedOrder = null;                           // clear the order reference

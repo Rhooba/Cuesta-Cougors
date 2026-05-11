@@ -97,9 +97,9 @@ public class FileManager {
         try (Scanner scanner = new Scanner(new File(DRIVERS_FILE))) {
             while (scanner.hasNextLine()) {       // keep reading until end of file
                 String line = scanner.nextLine(); // read one full line
-                String[] parts = line.split(","); // split by comma — gives us 5 fields
+                String[] parts = line.split(","); // split by comma — gives us 6 fields
 
-                if (parts.length == 5) {          // skip any malformed lines
+                if (parts.length == 6) {          // skip any malformed lines
                     String username = parts[0].trim(); // index 0 = username
                     String password = parts[1].trim(); // index 1 = password
                     String name     = parts[2].trim(); // index 2 = display name
@@ -108,12 +108,17 @@ public class FileManager {
                     // build the Driver object with the 4 constructor fields
                     Driver driver = new Driver(username, password, name, location);
 
-                    // index 4 looks like "4;3;5" — split by ";" to get each rating separately
-                    String[] ratings = parts[4].trim().split(";");
-                    for (String r : ratings) {
-                        // Integer.parseInt converts "4" (a String) to 4 (an int)
-                        driver.addRating(Integer.parseInt(r));
+                    // index 4 looks like "4;3;5" — skip the loop if there are no ratings yet
+                    if (!parts[4].trim().isEmpty()) {
+                        String[] ratings = parts[4].trim().split(";");
+                        for (String r : ratings) {
+                            // Integer.parseInt converts "4" (a String) to 4 (an int)
+                            driver.addRating(Integer.parseInt(r));
+                        }
                     }
+
+                    // index 5 is "true" or "false" — Boolean.parseBoolean converts the string
+                    driver.setAvailable(Boolean.parseBoolean(parts[5].trim()));
 
                     // addDriver also enqueues the driver into the priority pool if available
                     globalData.addDriver(driver);
@@ -240,7 +245,8 @@ public class FileManager {
                     driver.getPassword()         + "," +
                     driver.getName()             + "," +
                     driver.getCurrentLocation()  + "," +
-                    ratings);
+                    ratings                      + "," +
+                    driver.isAvailable());
             }
         } catch (IOException e) {
             // catches errors like disk full or permission denied
