@@ -55,32 +55,33 @@ public class Customer extends User {
                     viewOrderHistory();
                     break;
                 case "3":
-                    // collect only orders that have been delivered
-                    List<Order> deliveredOrders = new ArrayList<>();
+                    // collect only orders that have been delivered and not yet rated
+                    List<Order> deliverableOrders = new ArrayList<>();
                     for (Order o : orderHistory) {
-                        if (o.getStatus() == OrderStatus.DELIVERED) {
-                            deliveredOrders.add(o);
+                        if (o.getStatus() == OrderStatus.DELIVERED && !o.isRated()) {
+                            deliverableOrders.add(o);
                         }
                     }
-                    if (deliveredOrders.isEmpty()) {
-                        System.out.println("No delivered orders to rate.");
+                    if (deliverableOrders.isEmpty()) {
+                        System.out.println("No delivered orders available for rating.");
                         break;
                     }
-                    // display delivered orders numbered for selection
-                    System.out.println("\n--- Delivered Orders ---");
-                    for (int i = 0; i < deliveredOrders.size(); i++) {
-                        System.out.println((i + 1) + ". " + deliveredOrders.get(i).toString());
+                    // display deliverable orders numbered for selection
+                    System.out.println("\n--- Delivered Orders Available for Rating ---");
+                    for (int i = 0; i < deliverableOrders.size(); i++) {
+                        System.out.println((i + 1) + ". " + deliverableOrders.get(i).toString());
                     }
                     System.out.print("Pick an order to rate (number): ");
                     int orderChoice = Integer.parseInt(scnr.nextLine().trim()) - 1;
-                    if (orderChoice < 0 || orderChoice >= deliveredOrders.size()) {
+                    if (orderChoice < 0 || orderChoice >= deliverableOrders.size()) {
                         System.out.println("Invalid selection.");
                         break;
                     }
-                    Order selectedOrder = deliveredOrders.get(orderChoice);
+                    Order selectedOrder = deliverableOrders.get(orderChoice);
                     System.out.print("Enter a rating (1-5): ");
                     int rating = Integer.parseInt(scnr.nextLine().trim());
                     rateDriver(selectedOrder.getAssignedDriver(), rating);
+                    selectedOrder.setRated(true);
                     System.out.println("Rating submitted.");
                     break;
                 case "4":
@@ -183,8 +184,14 @@ public class Customer extends User {
      */
     public void rateDriver(Driver driver, int rating) {
         // rate your driver
+        if (driver == null) {
+            System.out.println("No driver assigned to this order.");
+            return;
+        }
         if (rating >= 1 && rating <= 5) {
             driver.addRating(rating);
+        } else {
+            System.out.println("Rating must be between 1 and 5.");
         }
     }
 

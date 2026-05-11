@@ -52,10 +52,12 @@ public class Driver extends User implements Comparable<Driver> {
             // print the menu options for the driver to choose from
             System.out.println("\n--- Driver Dashboard ---");
             System.out.println("Your current rating: " + String.format("%.2f", averageRating));
+            System.out.println("Availability: " + (isAvailable ? "Available" : "Unavailable"));
             System.out.println("1. View assigned order");
             System.out.println("2. Mark order in progress");
             System.out.println("3. Mark order delivered");
-            System.out.println("4. Logout");
+            System.out.println("4. Toggle availability");
+            System.out.println("5. Logout");
             System.out.print("Choose an option: ");
 
             // read the driver's input and remove any extra spaces with trim()
@@ -80,6 +82,9 @@ public class Driver extends User implements Comparable<Driver> {
                     System.out.println("Your order has been delivered!");
                     break;
                 case "4":
+                    toggleAvailability();
+                    break;
+                case "5":
                     System.out.println("Logging out...");      // return exits the loop and the method
                     return;
                 default:
@@ -115,6 +120,16 @@ public class Driver extends User implements Comparable<Driver> {
         isAvailable = true;                             // driver is now free to take new orders
         assignedOrder = null;                           // clear the order reference
         globalData.addDriverToPool(this);               // re-add this driver to the available pool
+    }
+
+    /**
+     * Toggles the driver's availability status.
+     * If currently available, sets to unavailable and removes from pool.
+     * If currently unavailable, sets to available and adds to pool.
+     */
+    public void toggleAvailability() {
+        setAvailable(!isAvailable);
+        System.out.println("Availability set to: " + (isAvailable ? "Available" : "Unavailable"));
     }
 
     /**

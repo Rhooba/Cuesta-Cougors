@@ -22,6 +22,7 @@ public class Order {
     private double total;
     private Driver assignedDriver;
     private String deliveryAddress;
+    private boolean rated;
 
     /** Static counter used to generate unique order IDs at runtime */
     private static int nextId = 1;
@@ -45,6 +46,7 @@ public class Order {
         this.items = items;
         this.deliveryAddress = deliveryAddress;
         this.assignedDriver = null; // no driver yet — assigned later by processNextOrder()
+        this.rated = false;          // no rating has been submitted yet
 
         this.total = calculateTotal(); // compute and cache the total at construction time
     }
@@ -122,6 +124,16 @@ public class Order {
     /** @return delivery destination string */
     public String getDeliveryAddress() {
         return deliveryAddress;
+    }
+
+    /** @return true if this order has already been rated by the customer */
+    public boolean isRated() {
+        return rated;
+    }
+
+    /** Marks this order as rated by the customer. */
+    public void setRated(boolean rated) {
+        this.rated = rated;
     }
 
     /**
