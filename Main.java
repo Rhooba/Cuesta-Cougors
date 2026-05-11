@@ -17,7 +17,6 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
-
         // Initialize the central data store and file I/O handler
         GlobalData globalData   = new GlobalData();
         FileManager fileManager = new FileManager();

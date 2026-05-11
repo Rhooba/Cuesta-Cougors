@@ -141,7 +141,13 @@ public class Customer extends User {
         Order order = new Order(this, selectedItems, deliveryAddress);
         orderHistory.add(order);          // save to this customer's history
         globalData.enqueueOrder(order);   // add to the system queue for processing
+        globalData.processNextOrder();    // immediately assign the order to the best available driver
         System.out.println("Your order has been placed. Order Total: $" + order.getTotal());
+        if (order.getAssignedDriver() != null) {
+            System.out.println("Your driver is: " + order.getAssignedDriver().getName());
+        } else {
+            System.out.println("No drivers available right now. Your order is queued.");
+        }
         return order;
     }
 

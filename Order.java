@@ -133,6 +133,7 @@ public class Order {
         return "Order #" + orderId +
                " | Customer: " + customer.getUsername() +
                " | Status: " + status +
+               " | Driver: " + (assignedDriver != null ? assignedDriver.getName() : "Unassigned") +
                " | Total: $" + String.format("%.2f", total);
     }
 }

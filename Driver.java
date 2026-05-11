@@ -51,6 +51,7 @@ public class Driver extends User implements Comparable<Driver> {
         while (true) {
             // print the menu options for the driver to choose from
             System.out.println("\n--- Driver Dashboard ---");
+            System.out.println("Your current rating: " + String.format("%.2f", averageRating));
             System.out.println("1. View assigned order");
             System.out.println("2. Mark order in progress");
             System.out.println("3. Mark order delivered");
